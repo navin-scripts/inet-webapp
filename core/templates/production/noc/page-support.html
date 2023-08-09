@@ -1,0 +1,91 @@
+{% extends "layouts/base.html" %} {% block title %} Support {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+{% endblock stylesheets %} 
+
+
+{% block nav_style %}
+
+navbar-dark navbar-theme-secondary
+
+<style>
+  .borderless-select {
+    border: none;
+    background-color: transparent; /* Optional: If you want the background to be transparent */
+    /* Add any other custom styles you want */
+  }
+  
+</style>
+
+{% endblock nav_style %} 
+
+{% block content %}
+
+<!-- Hero -->
+<section class="section-header bg-primary pb-9 pb-lg-10 text-white">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-10 text-center">
+        <h1 class="mb-3">Web App 2</h1>
+        <p class="lead px-lg-5 mb-5">
+          UniFi MAC Lookup
+        </p>
+        <form action="{% url 'NOC:unifilookup' %}" method="POST">
+            {% csrf_token %}
+            <div class="form-group bg-white shadow-soft rounded-pill mb-4 px-3 py-2">
+              <div class="row align-items-center">
+                <div class="col">
+                  <input type="text" name="unifi_mac" class="form-control border-0 form-control-flush shadow-none pb-2" placeholder="Enter full MAC addresss..." required>
+                </div>
+
+                <div class="col-auto">
+                  <button type="submit" class="btn btn-block btn-primary rounded-pill">
+                    Search
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+      </div>
+    </div>
+  </div>
+  <div class="pattern bottom"></div>
+</section>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<script>
+	var countries = new Bloodhound({
+	  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+	  queryTokenizer: Bloodhound.tokenizers.whitespace,
+	  prefetch: {
+		url: 'countries.json',
+		filter: function(list) {
+		  return $.map(list, function(name) {
+			return { name: name }; });
+		}
+	  }
+	});
+	countries.initialize();
+
+	$('#tags-input').tagsinput({
+	  typeaheadjs: {
+		name: 'countries',
+		displayKey: 'name',
+		valueKey: 'name',
+		source: countries.ttAdapter()
+	  }
+	});
+</script>
+
+{% endblock javascripts %}

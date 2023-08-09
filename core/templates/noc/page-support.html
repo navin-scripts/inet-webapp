@@ -1,0 +1,173 @@
+{% extends "layouts/base.html" %} {% block title %} Support {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+{% endblock stylesheets %} 
+
+
+{% block nav_style %}
+
+navbar-dark navbar-theme-secondary
+
+<style>
+  .borderless-select {
+    border: none;
+    background-color: transparent; /* Optional: If you want the background to be transparent */
+    /* Add any other custom styles you want */
+  }
+  
+</style>
+
+{% endblock nav_style %} 
+
+{% block content %}
+
+<!-- Hero -->
+<section class="section-header bg-primary pb-9 pb-lg-10 text-white">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-10 text-center">
+        <h1 class="mb-3">NOC WebApp</h1>
+        <p class="lead px-lg-5 mb-5">
+          An extention of the lookup tool
+        </p>
+        <form action="siteview" method="POST">
+            {% csrf_token %}
+            <div class="form-group bg-white shadow-soft rounded-pill mb-4 px-3 py-2">
+              <div class="row align-items-center">
+                <div class="col">
+                  <select class="select2 borderless-select" name="kit" id="interfaceInput">
+                    <option selected="selected">Select site</option>
+                    {% for k, v in kits.items %}
+                    <option value="{{ k }}">{{ v }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="col-auto">
+                  <button type="submit" class="btn btn-block btn-primary rounded-pill">
+                    Search
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+      </div>
+    </div>
+  </div>
+  <div class="pattern bottom"></div>
+</section>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+  <script>
+    // Initialize Select2 with tags
+    $(document).ready(function() {
+        $('#interfaceInput').select2({
+            tags: true,  // Enable tags feature
+            tokenSeparators: [','],  // Define token separators for multiple tags
+            createTag: function(params) {
+                // Allow creation of new tags
+                console.log(params)
+                return {
+                    id: params.term,
+                    text: params.term,
+                    isNewTag: true
+                };
+            },
+            ajax: {
+                url: 'search-kits',  // URL to fetch search results
+                dataType: 'json',
+                delay: 250,  // Delay before sending the AJAX request
+                
+                processResults: function(data) {
+                  console.log(data)
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
+            },
+            minimumInputLength: 1  // Minimum number of characters before triggering the search
+        });
+    });
+  
+</script>
+
+<script>
+// JavaScript function to populate search form options using kitdata view data
+function populateSearchForm() {
+    // Fetch options from the server
+    fetch('kitdata')
+      .then(response => response.json())
+      .then(data => {
+        // Get the datalist element
+        const datalist = document.querySelector('#siteOptions');
+  
+        // Loop through the keys of the data object
+        for (const key in data) {
+          console.log(key, data[key]);
+          const optionElement = document.createElement('option');
+          optionElement.value = key;
+          optionElement.textContent = data[key];
+          // optionElement.value = key;
+          // optionElement.textContent = data[key];
+          datalist.appendChild(optionElement);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }
+  
+  // Call the function to populate the search form
+  // populateSearchForm();
+  
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<script>
+    // Your existing Select2 initialization code
+
+    // Function to change the name attribute of the input tag based on the clicked div
+    function changeInputName(type) {
+        const inputElement = document.querySelector('#interfaceInput');
+        switch (type) {
+            case 'site':
+                inputElement.name = 'site';
+                break;
+            case 'mac':
+                inputElement.name = 'mac';
+                break;
+            case 'fastl2':
+                inputElement.name = 'fastl2';
+                break;
+            default:
+                break;
+        }
+    }
+
+    // Event listeners for the divs with IDs site, mac, and fastl2
+    document.getElementById('site').addEventListener('click', function() {
+        changeInputName('site');
+    });
+
+    document.getElementById('mac').addEventListener('click', function() {
+        changeInputName('mac');
+    });
+
+    document.getElementById('fastl2').addEventListener('click', function() {
+        changeInputName('fastl2');
+    });
+</script>
+
+{% endblock javascripts %}

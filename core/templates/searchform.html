@@ -1,0 +1,33 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Search {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+{% endblock stylesheets %}
+
+{% block nav_style %} navbar-dark navbar-theme-secondary {% endblock nav_style %}
+
+{% block content %}
+
+<div class="search-container">
+    <div class="search-box">
+      <input type="text" id="search-input" placeholder="Search..." />
+      <button id="search-btn">
+        <i class="fas fa-search"></i>
+      </button>
+    </div>
+    <div class="adv-search-container">
+      <a href="#" id="adv-search-link">Advanced Search</a>
+      <div class="adv-search-form">
+        <input type="text" id="adv-search-input" placeholder="Advanced Search..." />
+        <button id="adv-search-btn">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  {% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

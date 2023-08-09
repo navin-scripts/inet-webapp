@@ -1,0 +1,4 @@
+secretkeys.py
+db.*
+.venv
+*__pycache__*

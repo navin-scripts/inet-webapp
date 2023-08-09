@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pie Chart Example</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <canvas id="pieChart"></canvas>
+</body>
+</html>
+
+
+<script>
+  const data = [
+  {'application': 'Samsung', 'destination': null, 'protocol': '-', 'port': '-', 'recv': 9, 'sent': 6, 'flows': 1, 'activeTime': 60, 'numClients': 1},
+  {'application': 'Wi-Fi Calling', 'destination': null, 'protocol': '-', 'port': '-', 'recv': 18, 'sent': 9, 'flows': 1, 'activeTime': 180, 'numClients': 1},
+  {'application': 'Microsoft Services', 'destination': null, 'protocol': '-', 'port': '-', 'recv': 708, 'sent': 449, 'flows': 4, 'activeTime': 720, 'numClients': 3},
+  {'application': 'QUIC', 'destination': null, 'protocol': '-', 'port': '-', 'recv': 1122, 'sent': 199, 'flows': 9, 'activeTime': 360, 'numClients': 3},
+  {'application': 'Facebook', 'destination': null, 'protocol': '-', 'port': '-', 'recv': 9862, 'sent': 983, 'flows': 56, 'activeTime': 1500, 'numClients': 6},
+  {'application': 'Azure', 'destination': null, 'protocol': '-', 'port': '-', 'recv': 11, 'sent': 188, 'flows': 1, 'activeTime': 60, 'numClients': 1},
+  {'application': 'Netflix', 'destination': null, 'protocol': '-', 'port': '-', 'recv': 117888, 'sent': 2778, 'flows': 16, 'activeTime': 480, 'numClients': 1},
+  {'application': 'Gmail', 'destination': null, 'protocol': '-', 'port': '-', 'recv': 52, 'sent': 17, 'flows': 8, 'activeTime': 240, 'numClients': 1},
+  {'application': 'fastly', 'destination': null, 'protocol': '-', 'port': '-', 'recv': 108, 'sent': 12, 'flows': 2, 'activeTime': 120, 'numClients': 1},
+  {'application': 'Twitter', 'destination': null, 'protocol': '-', 'port': '-', 'recv': 397, 'sent': 14, 'flows': 2, 'activeTime': 120, 'numClients': 1},
+  {'application': 'Bing', 'destination': null, 'protocol': '-', 'port': '-', 'recv': 441, 'sent': 19, 'flows': 5, 'activeTime': 120, 'numClients': 1},
+  {'application': 'Windows Live Hotmail and Outlook', 'destination': null, 'protocol': '-', 'port': '-', 'recv': 465, 'sent': 429, 'flows': 4, 'activeTime': 960, 'numClients': 2},
+  {'application': 'WordPress', 'destination': null, 'protocol': '-', 'port': '-', 'recv': 410, 'sent': 16, 'flows': 1, 'activeTime': 60, 'numClients': 1}
+];
+
+// Extract application names and recv values from the data
+const labels = data.map(entry => entry.application);
+const recvData = data.map(entry => entry.recv);
+
+// Generate random colors for the pie slices
+const colors = Array.from({length: data.length}, () => randomColor());
+
+// Create the pie chart
+const ctx = document.getElementById('pieChart').getContext('2d');
+new Chart(ctx, {
+  type: 'pie',
+  data: {
+    labels: labels,
+    datasets: [{
+      data: recvData,
+      backgroundColor: colors,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    legend: {
+      display: true,
+      position: 'right',
+    },
+  }
+});
+
+// Generate a random color in hexadecimal format
+function randomColor() {
+  const letters = '0123456789ABCDEF';
+  let color = '#';
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
+</script>

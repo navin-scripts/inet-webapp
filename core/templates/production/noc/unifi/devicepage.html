@@ -1,0 +1,211 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Support Topic {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}
+
+<style>
+
+.centered {
+    text-align: center;
+    vertical-align: middle;
+}
+
+
+.status-circle {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Green status circle */
+.status-circle.green {
+    background-color: green;
+}
+
+/* Red status circle */
+.status-circle.red {
+    background-color: red;
+}
+
+
+
+
+
+
+    
+</style>
+
+{% endblock stylesheets %}
+
+{% block nav_style %} navbar-dark navbar-theme-secondary {% endblock nav_style %}
+
+{% block content %}
+
+    <!-- Hero -->
+    <section class="section-header bg-primary pb-9 pb-lg-10 text-white">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-12 col-md-10 text-center">
+              <!-- <h1 class="mb-3">Web App 2</h1> -->
+              <p class="lead px-lg-5 mb-5">
+                UniFi MAC Lookup
+              </p>
+              <form action="{% url 'NOC:unifilookup' %}" method="POST">
+                  {% csrf_token %}
+                  <div class="form-group bg-white shadow-soft rounded-pill mb-4 px-3 py-2">
+                    <div class="row align-items-center">
+                      <div class="col">
+                        <input type="text" name="unifi_mac" class="form-control border-0 form-control-flush shadow-none pb-2" placeholder="Enter full MAC addresss..." required>
+                      </div>
+      
+                      <div class="col-auto">
+                        <button type="submit" class="btn btn-block btn-primary rounded-pill">
+                          Search
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+                <br>
+                <br>
+            </div>
+          </div>
+        </div>
+        <div class="pattern bottom"></div>
+      </section>
+      <br>
+      <br>
+      <br>
+    <section class="section section-lg pt-0">
+        <div class="container mt-n8 mt-lg-n12 z-2">
+            <div class="row justify-content-center">
+                <div class="col">
+                    <div class="card shadow border-gray-300 p-4 p-lg-5">
+                        <!-- <p class="lead">Spaces is an incredibly beautiful, fully responsive, and mobile-first projects on the web – it is the perfect starting point for any creative and professional sites. Get started with Spaces's components and options for laying out your Spaces project, including SVG components, powerful scripts, fully detailed documentation, and yet developer friendly code.</p> -->
+                        <!-- Alert -->
+                        <!-- <div class="alert alert-secondary p-4 my-3 mb-5 my-lg-5" role="alert">
+                        <div class="media">
+                            <div class="media-body">
+                                <span class="mt-1 me-3"><i class="fas fa-file-alt"></i></span>
+                            <strong>Please make sure to not delete main switch of kit!</strong>
+                            </div>
+                        </div>
+                        </div> -->
+                        <!-- End Alert -->
+                        
+                        <h2 class="h3 mb-4">Device Table</h2>
+                        <div class="table-responsive-sm">
+                            <table class="table table-striped">
+                                <tr>
+                                    <th class="centered">Site</th>
+                                    <th class="centered">MAC</th>
+                                    <th class="centered">Model</th>
+                                    <th class="centered">Status</th>
+                                    <th class="centered">Action</th>
+                                </tr>
+                                <!-- d.site_id.description, d.site_id.name, d.mac, d.ip, d.model, d.gateway_mac.model -->
+                                <tr>
+                                    {% for d in device %}
+                                    <th class="centered">{{d.site_id.description}}</th>
+                                    <th class="centered">{{d.mac}}</th>
+                                    <td class="centered">{{d.model}}</td>
+                                    <td class="centered">
+                                        <div class="status-circle {% if d.state == 1 %}green{% else %}red{% endif %}"></div>
+                                    </td>
+                                    <td class="centered">
+                                        <a href="/ui-all.html" class="btn btn-danger animate-up-2">Forget</a>
+                                    </td>
+                                    {% endfor %}
+                                </tr>
+                            </table>
+                        </div>
+
+
+
+
+
+
+                        <!-- <p class="lead">Themesberg is not responsible for any technological delays beyond our control. If your spam blocker blocks our emails from reaching you or you do not provide a valid email address where you can be reachable then you can access your download from the Downloads page.</p>
+                        <p class="lead">Reach us at <a href="mailto:support@company.com">support@company.com</a></p>
+                        <ul class="text-secondary my-5">
+                        <li class="pb-2"><strong>Free updates:</strong> Spaces offers a lifetime free updates. This means you will never pay for any bug-fixes and compatibility upgrades for your theme, ever.</li>
+                        <li class="pb-2"><strong>Technical support:</strong> As always, our Customer Support team is available 24/7 to answer any questions you might have. We will do our best to get back to you within <strong>24-48 hours</strong>.</li>
+                        </ul> -->
+            
+                        <!-- <p class="lead">Themesberg does not process any order payments through the website. All payments are processed securely through online payment provider (e.g. PayPal, Stripe), a third party online payment provider. Feel free to contact us about our security policies.</p> -->
+            
+                        <!-- Resolved -->
+                        <div class="text-center border-top border-bottom border-gray-300 my-5 my-lg-6 py-5 py-lg-6">
+                        <!-- <h4 class="h4 mb-4 mb-lg-5">
+                            <span class="me-1"><i class="far fa-newspaper"></i></span>
+                            Was this article helpful?
+                        </h4> -->
+            
+                        <!-- <button type="button" class="btn btn-success mb-2 mx-1 animate-up-2 text-white"><span class="me-2"><i class="far fa-thumbs-up"></i></span>Yes, thanks!</button>
+                            <button type="button" class="btn btn-danger mb-2 mx-1 animate-down-2"><span class="me-2"><i class="far fa-thumbs-down"></i></span>Not really</button> -->
+
+                        </div>
+                        <!-- End Resolved -->
+
+                        <div class="row">
+                            <div class="col-12 col-md-4 mb-4 mb-lg-0">
+                                <!-- Related Articles -->
+                                <div class="mb-4">
+                                    <h3 class="h5 font-weight-medium">Related Articles</h3>
+                                </div>
+                        
+                                <ul class="list-unstyled">
+                                    <li class="pb-3"><a class="link-muted" href="/page-support-topic.html">Troubleshoot connection issues</a></li>
+                                    <li class="pb-3"><a class="link-muted" href="/page-support-topic.html">Getting started for workspace creators</a></li>
+                                    <li class="pb-3"><a class="link-muted" href="/page-support-topic.html">Edit your profile</a></li>
+                                </ul>
+                                <!-- End Related Articles -->
+                            </div>
+                            <div class="col-12 col-md-4 mb-4 mb-lg-0">
+                                <!-- Related Articles -->
+                                <div class="mb-4">
+                                    <h3 class="h5 font-weight-medium">Latest News</h3>
+                                </div>
+                        
+                                <ul class="list-unstyled">
+                                    <li class="pb-3"><a class="link-muted" href="/page-support-topic.html">Troubleshoot connection issues</a></li>
+                                    <li class="pb-3"><a class="link-muted" href="/page-support-topic.html">Getting started for workspace creators</a></li>
+                                    <li class="pb-3"><a class="link-muted" href="/page-support-topic.html">Edit your profile</a></li>
+                                </ul>
+                                <!-- End Related Articles -->
+                            </div>
+                            <div class="col-12 col-md-4 mb-4 mb-lg-0">
+                                <div class="mb-4">
+                                    <h3 class="h5 font-weight-medium">Support</h3>
+                                </div>
+                                <p>
+                                    Technical support for each product is given directly by the creators of Themesberg.                            
+                                </p>
+                                <a class="btn btn-sm btn-outline-primary" href="/page-support.html">
+                                    Support Center
+                                    <span class="fas fa-long-arrow-alt-right ms-2"></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<script>
+    console.log("{{device|safe}}")
+</script>
+
+{% endblock javascripts %}
